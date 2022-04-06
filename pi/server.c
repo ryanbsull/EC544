@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string.h>
+#include "../encryption/encrypt.h"
 #define PORT 1016
 
 int main(int argc, char const *argv[])
@@ -15,7 +16,8 @@ int main(int argc, char const *argv[])
     int numclient = 0;
     int addrlen = sizeof(address);
     char buffer[1024] = {0};
-    char *hello = "Hello from team 9";
+    char *hello = "Registered";
+    char* ready = "READY";
        
     // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -25,8 +27,7 @@ int main(int argc, char const *argv[])
     }
        
     // Forcefully attaching socket to the port
-    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR,
-                                                  &opt, sizeof(opt)))
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)))
     {
         perror("setsockopt");
         exit(EXIT_FAILURE);
@@ -55,10 +56,25 @@ int main(int argc, char const *argv[])
             exit(EXIT_FAILURE);
         }
         valread = read( new_socket[numclient] , buffer, 1024);
-        printf("%s\n",buffer );
         send(new_socket[numclient] , hello , strlen(hello) , 0 );
-        printf("Hello message sent\n");
         numclient++;
+        printf("CLIENT REGISTERED\n");
     }
+    int len = 256;
+    long int key = generate_key(len);
+    long int key_part[numclient];
+    split_key(key, key_part, numclient);
+    /*int i = 0;
+    for(; i< numclient; i++)
+        key_part[i] = i;*/
+    int i;
+    char key_data[256];
+    for(i = 0; i < numclient; i++){
+        sprintf(key_data, "%ld", key_part[i]);
+        send(new_socket[i], key_data, strlen(key_data), 0);
+        key_data[0] = '\0';
+        usleep(10);
+    }
+
     return 0;
 }
