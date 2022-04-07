@@ -56,23 +56,31 @@ int main(int argc, char const *argv[])
             exit(EXIT_FAILURE);
         }
         valread = read( new_socket[numclient] , buffer, 1024);
-        send(new_socket[numclient] , hello , strlen(hello) , 0 );
-        numclient++;
-        printf("CLIENT REGISTERED\n");
+        if(buffer[0] == 'G'){
+            send(new_socket[numclient] , hello , strlen(hello) , 0 );
+            numclient++;
+            printf("CLIENT REGISTERED\n");
+        }
     }
     int len = 256;
-    long int key = generate_key(len);
-    long int key_part[numclient];
-    split_key(key, key_part, numclient);
-    /*int i = 0;
-    for(; i< numclient; i++)
-        key_part[i] = i;*/
+    char key[len];
+    generate_key(len, key);
+    printf("KEY GENERATED\n\n");
+    printf("%s\n", key);
+    
+    char* key_part[numclient];
     int i;
-    char key_data[256];
+    for(i = 0; i < numclient; i++)
+        key_part[i] = (char*)malloc(len*sizeof(char));
+
+    split_key(key, key_part, numclient, len);
+    printf("KEY SPLIT:\n\n");
+    
+    for(i = 0; i < numclient; i++)
+        printf("%s\n", key_part[i]);
+
     for(i = 0; i < numclient; i++){
-        sprintf(key_data, "%ld", key_part[i]);
-        send(new_socket[i], key_data, strlen(key_data), 0);
-        key_data[0] = '\0';
+        send(new_socket[i], key_part[i], len, 0);
         usleep(10);
     }
 

@@ -7,12 +7,15 @@
 #include <arpa/inet.h>
 
 #define PORT 1016
+#define GENERATE 1
 
 int main(int argc, char const *argv[])
 {
     int sock = 0; long valread;
     struct sockaddr_in serv_addr;
-    char *hello = "READY";
+    char *hello;
+    if(GENERATE)
+        hello = "G";
     char buffer[1024] = {0};
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
@@ -43,8 +46,7 @@ int main(int argc, char const *argv[])
     printf("%s\n",buffer );
     buffer[0] = '\0';
     long int key_part;
-    while(read( sock , buffer, 1024) > 0)
-        key_part = (long int) atoi(buffer);
-    printf("%ld\n", key_part);
+    read( sock , buffer, 1024);
+    printf("%s\n", buffer);
     return 0;
 }
