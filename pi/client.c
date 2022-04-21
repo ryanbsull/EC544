@@ -47,6 +47,10 @@ int main(int argc, char const *argv[])
     buffer[0] = '\0';
     long int key_part;
     read( sock , buffer, 1024);
-    printf("%s\n", buffer);
+    int i;
+    int len = 256;
+    for(i = 0; i < len; i++)
+        printf("%x", buffer[i]);
+    printf("\n");
     return 0;
 }
