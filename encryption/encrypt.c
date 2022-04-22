@@ -34,25 +34,32 @@ void generate_key(int len, char* key){
 
 void split_key(char* key, char* key_part[], int numclient, int len){
 	int i, j, x = 0;
-	char* split = "\0\0\0\0";
+	char* split = "";
 	for(i = 0; i < numclient; i++){
-		printf("x: %d j: %d i: %d\n", x, j, i);
 		for(j = 0; j < len/numclient; j++, x++){
 			key_part[i][j] = key[x];
 		}
-		printf("KEY PART 0x%x MADE\n", i);
-		printf("x: %d j: %d i: %d\n", x, j, i);
 	}
-	printf("x: %d j: %d i: %d\n", x, j, i);
 	for(; x < len; x++, j++)
 		key_part[i-1][j] = key[x];
+	/*
 	printf("INITIAL SPLIT\nMIXING PARTS\n");
 	char part[3];
 	for(i = 0; i < numclient; i++){
 		sprintf(part, "%x", i);
-		printf("%s\n", part);
-		strcat(key_part[i], split);
+		printf("%s\n\n", part);
+		for(j = 0; j < len; j++)
+			printf("%x", key_part[i][j]);
+		printf("\n\n");
+		//strcat(key_part[i], split);
 		strcat(key_part[i], part);
+		for(j = 0; j < len; j++)
+			printf("%x", key_part[i][j]);
+		printf("\n\n");
 		strcat(key_part[i], key_part[(i+1)%numclient]);
+		for(j = 0; j < len; j++)
+			printf("%x", key_part[i][j]);
+		printf("\n\n");
 	}
+	*/
 }

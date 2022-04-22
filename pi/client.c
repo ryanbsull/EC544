@@ -41,16 +41,39 @@ int main(int argc, char const *argv[])
         return -1;
     }
     send(sock , hello , strlen(hello) , 0 );
-    printf("Hello message sent\n");
-    valread = read( sock , buffer, 1024);
+    printf("GENERATE COMMAND SENT\nAWAITING CODES\n");
+    read( sock , buffer, 1024);
     printf("%s\n",buffer );
     buffer[0] = '\0';
-    long int key_part;
-    read( sock , buffer, 1024);
+
+    read(sock, buffer, 1024);
+    printf("NUMCLIENT: %s\n",buffer );
+    int numclient = atoi(buffer);
+    char* key_part[numclient];
+
+    read(sock, buffer, 1024);
+    printf("LEN: %s\n",buffer );
+    int len = atoi(buffer);
     int i;
-    int len = 256;
+    for(i = 0; i < numclient; i++)
+                key_part[i] = (char*)malloc(len*sizeof(char));
+
+    read(sock , buffer, 1024);
+    int p1 = atoi(buffer);
+    int p2 = (p1 + 1) % numclient;
+    printf("P1: %d\n", p1);
+
+    read(sock , buffer, 1024);
+    strcpy(key_part[p1], buffer);
+
+    read(sock , buffer, 1024);
+    strcpy(key_part[p2], buffer);
+
     for(i = 0; i < len; i++)
-        printf("%x", buffer[i]);
-    printf("\n");
+        printf("%x", key_part[p1][i]);
+    printf("\n\n");
+    for(i = 0; i < len; i++)
+        printf("%x", key_part[p2][i]);
+    printf("\n\n");
     return 0;
 }

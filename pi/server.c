@@ -56,7 +56,7 @@ int main(int argc, char const *argv[])
         numclient = 0;
         decode = 0;
         printf("READY\n\n");
-        while(numclient < 3 && (generate < 3 || decode < 3)) {
+        while(numclient < 2 && (generate < 3 || decode < 2)) {
             if ((new_socket[numclient] = accept(server_fd, (struct sockaddr *)&address, 
                             (socklen_t*)&addrlen))<0)
             {
@@ -87,37 +87,72 @@ int main(int argc, char const *argv[])
             int i, j;
             generate_key(len, key);
             printf("KEY GENERATED\n\n");
-            for(i = 0; i < len; i++)
-                printf("%x", key[i]);
-            printf("\n");
-            
+            usleep(10);
+            char num[10];
+            char l[10];
+            sprintf(num, "%d", generate);
+            sprintf(l, "%d", len);
+            for(i = 0; i < generate; i++){
+                send(gen_socket[i], num, len, 0);
+                usleep(10);
+                send(gen_socket[i], l, 10, 0);
+                usleep(10);
+            }
+
             char* key_part[generate];
             
             for(i = 0; i < generate; i++)
                 key_part[i] = (char*)malloc(len*sizeof(char));
 
             split_key(key, key_part, numclient, len);
-            printf("KEY SPLIT:\n\n");
+            printf("KEY SPLIT\n\n");
+            for(i = 0; i < generate; i++){
+                sprintf(num, "%d", i);
+                send(gen_socket[i], num, len, 0);
+                usleep(50);
 
-            for(i = 0; i < numclient; i++){
-                for(j = 0; j < len; j++){
-                    printf("%x", key_part[i][j]);
-                }
-                printf("\n");
-            }
-
-            for(i = 0; i < numclient; i++){
-                send(new_socket[i], key_part[i], len, 0);
-                usleep(10);
+                send(gen_socket[i], key_part[i], len, 0);
+                usleep(50);
+                send(gen_socket[i], key_part[(i+1)%generate], len, 0);
+                usleep(50);
             }
             generate = 0;
         } else if (decode >= 2) {
             int len = 256;
-            char* key_part[decode];
-            int i;
-            for(i = 0; i < decode; i++)
+            char* key_part[decode+1];
+            char key[len+10];
+            int i, idx, end = 0;
+            for(i = 0; i < decode+1; i++)
                 key_part[i] = (char*)malloc(len*sizeof(char));
             
+            for(i = 0; i < decode; i++){
+                read(dec_socket[i], buffer, len);
+                idx = atoi(buffer);
+                printf("IDX 1: %d\n", idx);
+                if(idx > end)
+                    end = idx;
+
+                read(dec_socket[i], buffer, len);
+                if(!key_part[idx])
+                    strcpy(key_part[idx], buffer);
+                
+                read(dec_socket[i], buffer, len);
+                idx = atoi(buffer);
+                printf("IDX 2: %d\n", idx);
+                if(idx > end)
+                    end = idx;
+
+                read(dec_socket[i], buffer, len);
+                if(!key_part[idx])
+                    strcpy(key_part[idx], buffer);
+            }
+
+            for(i = 0; i <= end; i++)
+                strcat(key, key_part[i]);
+            
+            for(i = 0; i < len; i++)
+                printf("%x", key[i]);
+            printf("\n");
         }
     }
     return 0;
