@@ -154,6 +154,9 @@ int main(int argc, char const *argv[])
                 printf("%x", key[i]);
             printf("\n");
         }
+        int i;
+        for(i = 0; i < numclient; i++)
+            close(new_socket[i]);
     }
     return 0;
 }

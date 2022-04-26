@@ -6,7 +6,7 @@ FILES = server client
 all: $(FILES)
 
 server: server.c
-	$(CC) $? $(INCLUDES) $(CFLAGS) $@
+	$(CC) $? $(INCLUDES) $(CFLAGS) $@ -lcrypto -lssl
 
 client: client.c
 	$(CC) $? $(CFLAGS) $@
