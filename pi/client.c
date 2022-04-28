@@ -5,7 +5,6 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <arpa/inet.h>
-#include <libssl.h>
 
 #define PORT 101694
 #define GENERATE 1

@@ -1,5 +1,7 @@
 #include"encrypt.h"
-#include <openssl.h>
+#include <openssl/rsa.h>
+#include <openssl/pem.h>
+#include <openssl/err.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
