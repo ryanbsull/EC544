@@ -88,7 +88,7 @@ int main(int argc, char const *argv[])
             int i, j;
             generate_key(len, len, priv_key, pub_key);
             printf("KEY GENERATED\n\n");
-            printf("%s\n\n%s\n\n", priv_key, pub_key)
+            printf("%s\n\n%s\n\n", priv_key, pub_key);
             usleep(10);
             char num[10];
             char l[10];
