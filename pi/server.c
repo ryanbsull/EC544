@@ -82,20 +82,21 @@ int main(int argc, char const *argv[])
             }
         }
         if(generate >= 3){
-            int len = 256;
-            char priv_key[len];
-            char pub_key[len];
+            int priv_len = 1024;
+            int pub_len = 256;
+            char priv_key[priv_len+1];
+            char pub_key[pub_len+1];
             int i, j;
-            generate_key(len, len, priv_key, pub_key);
+            generate_key(priv_len, pub_len, priv_key, pub_key);
             printf("KEY GENERATED\n\n");
             printf("%s\n\n%s\n\n", priv_key, pub_key);
             usleep(10);
             char num[10];
             char l[10];
             sprintf(num, "%d", generate);
-            sprintf(l, "%d", len);
+            sprintf(l, "%d", priv_len);
             for(i = 0; i < generate; i++){
-                send(gen_socket[i], num, len, 0);
+                send(gen_socket[i], num, 10, 0);
                 usleep(10);
                 send(gen_socket[i], l, 10, 0);
                 usleep(10);
@@ -104,18 +105,18 @@ int main(int argc, char const *argv[])
             char* key_part[generate];
             
             for(i = 0; i < generate; i++)
-                key_part[i] = (char*)malloc(len*sizeof(char));
+                key_part[i] = (char*)malloc(priv_len*sizeof(char));
 
-            split_key(priv_key, key_part, numclient, len);
+            split_key(priv_key, key_part, numclient, priv_len);
             printf("KEY SPLIT\n\n");
             for(i = 0; i < generate; i++){
                 sprintf(num, "%d", i);
-                send(gen_socket[i], num, len, 0);
+                send(gen_socket[i], num, priv_len, 0);
                 usleep(50);
 
-                send(gen_socket[i], key_part[i], len, 0);
+                send(gen_socket[i], key_part[i], priv_len, 0);
                 usleep(50);
-                send(gen_socket[i], key_part[(i+1)%generate], len, 0);
+                send(gen_socket[i], key_part[(i+1)%generate], priv_len, 0);
                 usleep(50);
             }
             generate = 0;
