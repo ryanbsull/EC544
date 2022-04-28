@@ -69,11 +69,9 @@ int main(int argc, char const *argv[])
     read(sock , buffer, 1024);
     strcpy(key_part[p2], buffer);
 
-    for(i = 0; i < len; i++)
-        printf("%x", key_part[p1][i]);
+    printf("%s", key_part[p1]);
     printf("\n\n");
-    for(i = 0; i < len; i++)
-        printf("%x", key_part[p2][i]);
+    printf("%s", key_part[p2]);
     printf("\n\n");
     return 0;
 }
