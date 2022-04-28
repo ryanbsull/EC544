@@ -73,7 +73,7 @@ void generate_key(int priv_len, int pub_len, char* priv_key, char* pub_key){
 	if (pbkeybio == NULL) {
 		return;
 	}
-	evp_pbkey = PEM_read_bio_RSAPublicKey(pbkeybio, &pb_rsa, NULL, NULL);
+	pb_rsa = PEM_read_bio_RSAPublicKey(pbkeybio, &pb_rsa, NULL, NULL);
 	if (pb_rsa == NULL) {
 		char buffer[120];
 		ERR_error_string(ERR_get_error(), buffer);
@@ -84,7 +84,7 @@ void generate_key(int priv_len, int pub_len, char* priv_key, char* pub_key){
 	if (pkeybio == NULL)
 		return;
 
-	evp_pkey = PEM_read_bio_RSAPrivateKey(pkeybio, &p_rsa, NULL, NULL);
+	p_rsa = PEM_read_bio_RSAPrivateKey(pkeybio, &p_rsa, NULL, NULL);
 	if (p_rsa == NULL) {
 		char buffer[120];
 		ERR_error_string(ERR_get_error(), buffer);
