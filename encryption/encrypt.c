@@ -58,8 +58,8 @@ void generate_key(int priv_len, int pub_len, char* priv_key, char* pub_key){
 	priv_len = BIO_pending(bp_private);
 	pub_len = BIO_pending(bp_public);
 
-	priv_key = (char*) malloc(priv_len + 1);
-	pub_key = (char*) malloc(pub_len + 1);
+	//priv_key = (char*) malloc(priv_len + 1);
+	//pub_key = (char*) malloc(pub_len + 1);
 
 	BIO_read(bp_private, priv_key, priv_len);
 	BIO_read(bp_public, pub_key, pub_len);
