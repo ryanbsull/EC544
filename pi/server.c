@@ -56,7 +56,7 @@ int main(int argc, char const *argv[])
         numclient = 0;
         decode = 0;
         printf("READY\n\n");
-        while(numclient < 2 && (generate < 3 || decode < 2)) {
+        while((numclient < 2 && decode < 2) || (numclient < 3 && generate < 3)) {
             if ((new_socket[numclient] = accept(server_fd, (struct sockaddr *)&address, 
                             (socklen_t*)&addrlen))<0)
             {
