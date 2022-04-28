@@ -29,7 +29,9 @@ void generate_key(int priv_len, int pub_len, char* priv_key, char* pub_key){
 	BIO *bp_public = NULL, *bp_private = NULL;
 	int bits = 2048;
 	unsigned long e = RSA_F4;
-
+	
+	RSA *pb_rsa = NULL;
+	RSA *p_rsa = NULL;
 	EVP_PKEY *evp_pbkey = NULL;
 	EVP_PKEY *evp_pkey = NULL;
 
@@ -66,28 +68,30 @@ void generate_key(int priv_len, int pub_len, char* priv_key, char* pub_key){
 	pub_key[pub_len] = '\0';
 
 	printf("\n%s\n%s\n", priv_key, pub_key);
-	/*
-	pbkeybio = BIO_new_mem_buf((void*) pub_key, -1);
+	
+	pbkeybio = BIO_new_mem_buf((void*) pub_key, pub_len);
 	if (pbkeybio == NULL) {
 		return;
 	}
-	evp_pbkey = PEM_read_bio_PUBKEY(pbkeybio, &evp_pbkey, NULL, NULL);
-	if (evp_pbkey == NULL) {
+	evp_pbkey = PEM_read_bio_RSAPublicKey(pbkeybio, &pb_rsa, NULL, NULL);
+	if (pb_rsa == NULL) {
 		char buffer[120];
 		ERR_error_string(ERR_get_error(), buffer);
 		printf("Error reading public key:%s\n", buffer);
 	}
 
-	pkeybio = BIO_new_mem_buf((void*) priv_key, -1);
+	pkeybio = BIO_new_mem_buf((void*) priv_key, priv_len);
 	if (pkeybio == NULL)
 		return;
 
-	evp_pkey = PEM_read_bio_PrivateKey(pkeybio, &evp_pkey, NULL, NULL);
-	if (evp_pbkey == NULL) {
+	evp_pkey = PEM_read_bio_RSAPrivateKey(pkeybio, &p_rsa, NULL, NULL);
+	if (p_rsa == NULL) {
 		char buffer[120];
 		ERR_error_string(ERR_get_error(), buffer);
 		printf("Error reading private key:%s\n", buffer);
 	}
+	evp_pkey = EVP_PKEY_new(); 
+	EVP_PKEY_assign_RSA(evp_pkey, p_rsa);
 
 	BIO_free(pbkeybio);
 	BIO_free(pkeybio);
@@ -98,7 +102,7 @@ free_all:
 	BIO_free_all(bp_private);
 	RSA_free(r);
 	BN_free(bne);
-	*/
+	
 }
 
 void split_key(char* key, char* key_part[], int numclient, int len){
