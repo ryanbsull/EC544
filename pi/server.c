@@ -83,9 +83,10 @@ int main(int argc, char const *argv[])
         }
         if(generate >= 3){
             int len = 256;
-            char key[len];
+            char priv_key[len];
+            char pub_key[len];
             int i, j;
-            generate_key(len, key);
+            generate_key(len, len, priv_key, pub_key);
             printf("KEY GENERATED\n\n");
             usleep(10);
             char num[10];
@@ -104,7 +105,7 @@ int main(int argc, char const *argv[])
             for(i = 0; i < generate; i++)
                 key_part[i] = (char*)malloc(len*sizeof(char));
 
-            split_key(key, key_part, numclient, len);
+            split_key(priv_key, key_part, numclient, len);
             printf("KEY SPLIT\n\n");
             for(i = 0; i < generate; i++){
                 sprintf(num, "%d", i);
@@ -120,7 +121,7 @@ int main(int argc, char const *argv[])
         } else if (decode >= 2) {
             int len = 256;
             char* key_part[decode+1];
-            char key[len+10];
+            char priv_key[len+10];
             int i, idx, end = 0;
             for(i = 0; i < decode+1; i++)
                 key_part[i] = (char*)malloc(len*sizeof(char));
@@ -148,10 +149,10 @@ int main(int argc, char const *argv[])
             }
 
             for(i = 0; i <= end; i++)
-                strcat(key, key_part[i]);
+                strcat(priv_key, key_part[i]);
             
             for(i = 0; i < len; i++)
-                printf("%x", key[i]);
+                printf("%x", priv_key[i]);
             printf("\n");
         }
         int i;
