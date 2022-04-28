@@ -66,7 +66,7 @@ void generate_key(int priv_len, int pub_len, char* priv_key, char* pub_key){
 	pub_key[pub_len] = '\0';
 
 	printf("\n%s\n%s\n", priv_key, pub_key);
-
+	/*
 	pbkeybio = BIO_new_mem_buf((void*) pub_key, -1);
 	if (pbkeybio == NULL) {
 		return;
@@ -98,7 +98,7 @@ free_all:
 	BIO_free_all(bp_private);
 	RSA_free(r);
 	BN_free(bne);
-
+	*/
 }
 
 void split_key(char* key, char* key_part[], int numclient, int len){
