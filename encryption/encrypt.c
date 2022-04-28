@@ -55,8 +55,8 @@ void generate_key(int priv_len, int pub_len, char* priv_key, char* pub_key){
 	bp_private = BIO_new(BIO_s_mem());
 	PEM_write_bio_RSAPrivateKey(bp_private, r, NULL, NULL, 0, NULL, NULL);
 
-	priv_len = BIO_pending(bp_private);
-	pub_len = BIO_pending(bp_public);
+	//priv_len = BIO_pending(bp_private);
+	//pub_len = BIO_pending(bp_public);
 
 	//priv_key = (char*) malloc(priv_len + 1);
 	//pub_key = (char*) malloc(pub_len + 1);
