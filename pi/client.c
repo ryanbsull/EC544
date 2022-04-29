@@ -5,6 +5,7 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <arpa/inet.h>
+#include <fcntl.h>
 
 #define PORT 1016
 #define GENERATE 1
@@ -51,28 +52,38 @@ int main(int argc, char const *argv[])
     int numclient = atoi(buffer);
     char* key_part[numclient];
 
-    read(sock, buffer, 10);
+    while(read(sock, buffer, 100) < 1);
     printf("LEN: %s\n",buffer);
     int len = atoi(buffer);
     int i;
     for(i = 0; i < numclient; i++)
         key_part[i] = (char*)malloc(len*sizeof(char));
 
-    read(sock , buffer, 10);
+    while(read(sock , buffer, 100) < 1);
     int p1 = atoi(buffer);
     int p2 = (p1 + 1) % numclient;
     printf("P1: %s\n", buffer);
     printf("P2: %d\n", p2);
 
-    read(sock , buffer, len);
+    while(read(sock , buffer, len) < len);
     strcpy(key_part[p1], buffer);
 
-    read(sock , buffer, len);
+    while(read(sock , buffer, len) < len);
     strcpy(key_part[p2], buffer);
-
+    
+    printf("KEYPART 1: \n");
     printf("%s", key_part[p1]);
     printf("\n\n");
+    printf("KEYPART 2: \n");
     printf("%s", key_part[p2]);
     printf("\n\n");
+
+    int part1 = open("key_1", O_WRONLY | O_APPEND | O_CREAT, 0644);
+    write(part1, key_part[p1], len);
+    int part2 = open("key_2", O_WRONLY | O_APPEND | O_CREAT, 0644);
+    write(part2, key_part[p2], len);
+    
+    close(part1);
+    close(part2);
     return 0;
 }

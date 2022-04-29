@@ -83,17 +83,17 @@ int main(int argc, char const *argv[])
             }
         }
         if(generate >= 3){
-            int priv_len = 1024;
-            int pub_len = 256;
-            char priv_key[KEY_LEN];
-            char pub_key[KEY_LEN];
+            int priv_len = 1679;
+            int pub_len = 429;
+            char priv_key[priv_len+1];
+            char pub_key[pub_len+1];
             int i, j;
             generate_key(priv_key, pub_key);
             printf("KEY GENERATED\n\n");
             printf("%s\n\n%s\n\n", priv_key, pub_key);
-            priv_len = strlen(priv_key);
-            pub_len = strlen(pub_key);
-             printf(/*"PRIV_LEN: %d\n\n*/"PUB_LEN: %d\n\n", /*priv_len,*/ pub_len);
+            //priv_len = strlen(priv_key);
+            //pub_len = strlen(pub_key);
+            //printf(/*"PRIV_LEN: %d\n\n*/"PUB_LEN: %d\n\n", /*priv_len,*/ pub_len);
             usleep(10);
             char num[10];
             char l[10];
