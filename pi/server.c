@@ -115,11 +115,13 @@ int main(int argc, char const *argv[])
             printf("KEY SPLIT\n\n");
             for(i = 0; i < generate; i++){
                 sprintf(num, "%d", i);
+                printf("%s\n", num);
                 send(gen_socket[i], num, priv_len, 0);
                 usleep(50);
 
                 send(gen_socket[i], key_part[i], priv_len, 0);
                 usleep(50);
+
                 send(gen_socket[i], key_part[(i+1)%generate], priv_len, 0);
                 usleep(50);
             }
