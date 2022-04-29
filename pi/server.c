@@ -94,18 +94,17 @@ int main(int argc, char const *argv[])
             //priv_len = strlen(priv_key);
             //pub_len = strlen(pub_key);
             //printf(/*"PRIV_LEN: %d\n\n*/"PUB_LEN: %d\n\n", /*priv_len,*/ pub_len);
-            usleep(10);
             char num[10];
             char l[10];
             sprintf(num, "%d", generate);
             sprintf(l, "%d", priv_len);
             printf("PRIV_LEN: %s\n\n", l);
-            usleep(20);
+            usleep(200);
             for(i = 0; i < generate; i++){
                 send(gen_socket[i], num, 100, 0);
-                usleep(10);
+                usleep(100);
                 send(gen_socket[i], l, 100, 0);
-                usleep(10);
+                usleep(100);
             }
 
             char* key_part[generate];
@@ -119,13 +118,13 @@ int main(int argc, char const *argv[])
                 sprintf(num, "%d", i);
                 printf("%s\n", num);
                 send(gen_socket[i], num, priv_len, 0);
-                usleep(50);
+                usleep(100);
 
                 send(gen_socket[i], key_part[i], priv_len, 0);
-                usleep(50);
+                usleep(100);
 
                 send(gen_socket[i], key_part[(i+1)%generate], priv_len, 0);
-                usleep(50);
+                usleep(100);
             }
             generate = 0;
         } else if (decode >= 2) {
