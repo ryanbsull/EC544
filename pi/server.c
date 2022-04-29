@@ -6,6 +6,7 @@
 #include <string.h>
 #include "../encryption/encrypt.h"
 #define PORT 1016
+#define KEY_LEN 2048
 
 int main(int argc, char const *argv[])
 {
@@ -84,12 +85,14 @@ int main(int argc, char const *argv[])
         if(generate >= 3){
             int priv_len = 1024;
             int pub_len = 256;
-            char priv_key[priv_len+1];
-            char pub_key[pub_len+1];
+            char priv_key[KEY_LEN];
+            char pub_key[KEY_LEN];
             int i, j;
-            generate_key(priv_len, pub_len, priv_key, pub_key);
+            generate_key(priv_key, pub_key);
             printf("KEY GENERATED\n\n");
             printf("%s\n\n%s\n\n", priv_key, pub_key);
+            priv_len = strlen(priv_key);
+            pub_len = strlen(pub_key);
             usleep(10);
             char num[10];
             char l[10];
@@ -121,9 +124,9 @@ int main(int argc, char const *argv[])
             }
             generate = 0;
         } else if (decode >= 2) {
-            int len = 256;
+            int len = KEY_LEN;
             char* key_part[decode+1];
-            char priv_key[len+10];
+            char priv_key[KEY_LEN];
             int i, idx, end = 0;
             for(i = 0; i < decode+1; i++)
                 key_part[i] = (char*)malloc(len*sizeof(char));

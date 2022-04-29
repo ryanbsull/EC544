@@ -23,12 +23,13 @@ long get_seed(int devID){
 }
 #endif
 
-void generate_key(int priv_len, int pub_len, char* priv_key, char* pub_key){
+void generate_key(char* priv_key, char* pub_key){
 	RSA *r = NULL;
 	BIGNUM *bne = NULL;
 	BIO *bp_public = NULL, *bp_private = NULL;
 	int bits = 2048;
 	unsigned long e = RSA_F4;
+	int priv_len, pub_len;
 	
 	RSA *pb_rsa = NULL;
 	RSA *p_rsa = NULL;
@@ -38,14 +39,12 @@ void generate_key(int priv_len, int pub_len, char* priv_key, char* pub_key){
 	BIO *pbkeybio = NULL;
 	BIO *pkeybio = NULL;
 
-	// 1. generate rsa key
 	bne = BN_new();
 	BN_set_word(bne, e);
 
 	r = RSA_new();
 	RSA_generate_key_ex(r, bits, bne, NULL);
 
-	// 2. save public key
 	bp_public = BIO_new_file("public.pem", "w+");
 	bp_public = BIO_new(BIO_s_mem());
 	PEM_write_bio_RSAPublicKey(bp_public, r);
@@ -55,8 +54,8 @@ void generate_key(int priv_len, int pub_len, char* priv_key, char* pub_key){
 	bp_private = BIO_new(BIO_s_mem());
 	PEM_write_bio_RSAPrivateKey(bp_private, r, NULL, NULL, 0, NULL, NULL);
 
-	//priv_len = BIO_pending(bp_private);
-	//pub_len = BIO_pending(bp_public);
+	priv_len = BIO_pending(bp_private);
+	pub_len = BIO_pending(bp_public);
 
 	//priv_key = (char*) malloc(priv_len + 1);
 	//pub_key = (char*) malloc(pub_len + 1);
