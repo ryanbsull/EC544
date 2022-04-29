@@ -63,7 +63,7 @@ int main(int argc, char const *argv[])
             for(i = 0; i < numclient; i++)
                 key_part[i] = (char*)malloc(len*sizeof(char));
 
-            read(sock , buffer, 10);
+            read(sock , buffer, 1);
             int p1 = atoi(buffer);
             int p2 = (p1 + 1) % numclient;
             printf("P1: %s\n", buffer);
