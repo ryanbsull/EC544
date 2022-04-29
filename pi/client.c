@@ -51,22 +51,23 @@ int main(int argc, char const *argv[])
     int numclient = atoi(buffer);
     char* key_part[numclient];
 
-    read(sock, buffer, 1024);
-    printf("LEN: %s\n",buffer );
+    read(sock, buffer, 10);
+    printf("LEN: %s\n",buffer);
     int len = atoi(buffer);
     int i;
     for(i = 0; i < numclient; i++)
-                key_part[i] = (char*)malloc(len*sizeof(char));
+        key_part[i] = (char*)malloc(len*sizeof(char));
 
-    read(sock , buffer, 1024);
+    read(sock , buffer, 10);
     int p1 = atoi(buffer);
     int p2 = (p1 + 1) % numclient;
     printf("P1: %s\n", buffer);
+    printf("P2: %d\n", p2);
 
-    read(sock , buffer, 1024);
+    read(sock , buffer, len);
     strcpy(key_part[p1], buffer);
 
-    read(sock , buffer, 1024);
+    read(sock , buffer, len);
     strcpy(key_part[p2], buffer);
 
     printf("%s", key_part[p1]);

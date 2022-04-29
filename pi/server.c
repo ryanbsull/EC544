@@ -102,9 +102,9 @@ int main(int argc, char const *argv[])
             printf("PRIV_LEN: %s\n\n", l);
             usleep(20);
             for(i = 0; i < generate; i++){
-                send(gen_socket[i], num, 10, 0);
+                send(gen_socket[i], num, 100, 0);
                 usleep(10);
-                send(gen_socket[i], l, 10, 0);
+                send(gen_socket[i], l, 100, 0);
                 usleep(10);
             }
 
