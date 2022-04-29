@@ -114,20 +114,17 @@ int main(int argc, char const *argv[])
             for(i = 0; i < generate; i++)
                 printf("%s\n\n", key_part[i]);
             
-            usleep(50);
-            char *brk = "\n\n";
             for(i = 0; i < generate; i++){
-                sprintf(num, "\n%d\n", i);
-                printf("%s\n", num);
+                sprintf(num, "%d", i);
                 send(gen_socket[i], num, strlen(num), 0);
                 
-                sprintf(num, "\n%d\n", strlen(key_part[i]));
+                sprintf(num, "%d", strlen(key_part[i]));
                 send(gen_socket[i], num, strlen(num), 0);
-                sprintf(num, "\n%d\n", strlen(key_part[(i+1)%generate]));
+                sprintf(num, "%d", strlen(key_part[(i+1)%generate]));
                 send(gen_socket[i], num, strlen(num), 0);
-
+            }
+            for(i = 0; i < generate; i++){
                 send(gen_socket[i], key_part[i], strlen(key_part[i]), 0);
-
                 send(gen_socket[i], key_part[(i+1)%generate], strlen(key_part[(i+1)%generate]), 0);
             }
             generate = 0;
