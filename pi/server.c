@@ -93,6 +93,7 @@ int main(int argc, char const *argv[])
             printf("%s\n\n%s\n\n", priv_key, pub_key);
             priv_len = strlen(priv_key);
             pub_len = strlen(pub_key);
+             printf("PRIV_LEN: %d\n\nPUB_LEN: %d\n\n", priv_len, pub_len);
             usleep(10);
             char num[10];
             char l[10];
