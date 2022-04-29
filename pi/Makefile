@@ -12,4 +12,4 @@ client: client.c
 	$(CC) $? $(CFLAGS) $@
 
 clean:
-	rm -rf $(FILES)
+	rm -rf $(FILES) *.pem
