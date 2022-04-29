@@ -49,7 +49,7 @@ int main(int argc, char const *argv[])
         send(sock , gen , strlen(gen) , 0 );
         printf("GENERATE COMMAND SENT\nAWAITING CODES\n");
         char* brk = "\n";
-        int data = open("key.dat", O_WRONLY | O_APPEND | O_CREAT, 0644);
+        int data = open("key2.dat", O_WRONLY | O_APPEND | O_CREAT, 0644);
         int cnt;
         while((cnt = read( sock , buffer, sizeof(buffer))) > 0) {
             write(data, buffer, cnt);
