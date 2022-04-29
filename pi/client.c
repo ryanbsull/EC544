@@ -51,14 +51,17 @@ int main(int argc, char const *argv[])
             printf("GENERATE COMMAND SENT\nAWAITING CODES\n");
             read( sock , buffer, 1);
             printf("%s\n",buffer );
+            memset(buffer, 0, 2048);
 
             read(sock, buffer, 10);
             printf("NUMCLIENT: %s\n",buffer );
             int numclient = atoi(buffer);
+            memset(buffer, 0, 2048);
 
             read(sock, buffer, 10);
             printf("LEN: %s\n",buffer);
             int len = atoi(buffer);
+            memset(buffer, 0, 2048);
             int i;
             for(i = 0; i < numclient; i++)
                 key_part[i] = (char*)malloc(len*sizeof(char));
@@ -66,14 +69,17 @@ int main(int argc, char const *argv[])
             read(sock , buffer, 1);
             int p1 = atoi(buffer);
             int p2 = (p1 + 1) % numclient;
+            memset(buffer, 0, 2048);
             printf("P1: %s\n", buffer);
             printf("P2: %d\n", p2);
 
-            while(read(sock , buffer, len) < len);
+            read(sock , buffer, len);
             strcpy(key_part[p1], buffer);
+            memset(buffer, 0, 2048);
 
-            while(read(sock , buffer, len) < len);
+            read(sock , buffer, len);
             strcpy(key_part[p2], buffer);
+            memset(buffer, 0, 2048);
             
             printf("KEYPART 1: \n");
             printf("%s", key_part[p1]);
