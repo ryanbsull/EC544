@@ -61,7 +61,7 @@ int main(int argc, char const *argv[])
     read(sock , buffer, 1024);
     int p1 = atoi(buffer);
     int p2 = (p1 + 1) % numclient;
-    printf("P1: %d\n", p1);
+    printf("P1: %s\n", buffer);
 
     read(sock , buffer, 1024);
     strcpy(key_part[p1], buffer);
