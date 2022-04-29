@@ -100,6 +100,7 @@ int main(int argc, char const *argv[])
             sprintf(num, "%d", generate);
             sprintf(l, "%d", priv_len);
             printf("PRIV_LEN: %s\n\n", l);
+            usleep(20);
             for(i = 0; i < generate; i++){
                 send(gen_socket[i], num, 10, 0);
                 usleep(10);
