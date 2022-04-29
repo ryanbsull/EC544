@@ -101,7 +101,7 @@ int main(int argc, char const *argv[])
             printf("PRIV_LEN: %s\n\n", l);
             usleep(200);
             for(i = 0; i < generate; i++){
-                send(gen_socket[i], num, 100, 0);
+                send(gen_socket[i], num, 10, 0);
                 usleep(100);
                 send(gen_socket[i], l, 100, 0);
                 usleep(100);
@@ -112,8 +112,12 @@ int main(int argc, char const *argv[])
             for(i = 0; i < generate; i++)
                 key_part[i] = (char*)malloc(priv_len*sizeof(char));
 
-            split_key(priv_key, key_part, numclient, priv_len);
+            split_key(priv_key, key_part, generate, priv_len);
             printf("KEY SPLIT\n\n");
+
+            for(i = 0; i < generate; i++)
+                printf("%s\n\n", key_part[i]);
+            
             for(i = 0; i < generate; i++){
                 sprintf(num, "%d", i);
                 printf("%s\n", num);
