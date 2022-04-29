@@ -93,12 +93,13 @@ int main(int argc, char const *argv[])
             printf("%s\n\n%s\n\n", priv_key, pub_key);
             priv_len = strlen(priv_key);
             pub_len = strlen(pub_key);
-             printf("PRIV_LEN: %d\n\nPUB_LEN: %d\n\n", priv_len, pub_len);
+             printf(/*"PRIV_LEN: %d\n\n*/"PUB_LEN: %d\n\n", /*priv_len,*/ pub_len);
             usleep(10);
             char num[10];
             char l[10];
             sprintf(num, "%d", generate);
             sprintf(l, "%d", priv_len);
+            printf("PRIV_LEN: %s\n\n", l);
             for(i = 0; i < generate; i++){
                 send(gen_socket[i], num, 10, 0);
                 usleep(10);
