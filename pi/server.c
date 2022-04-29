@@ -91,9 +91,7 @@ int main(int argc, char const *argv[])
             generate_key(priv_key, pub_key);
             printf("KEY GENERATED\n\n");
             printf("%s\n\n%s\n\n", priv_key, pub_key);
-            //priv_len = strlen(priv_key);
-            //pub_len = strlen(pub_key);
-            //printf(/*"PRIV_LEN: %d\n\n*/"PUB_LEN: %d\n\n", /*priv_len,*/ pub_len);
+
             char num[10];
             char l[10];
             sprintf(num, "%d", generate);
@@ -102,9 +100,7 @@ int main(int argc, char const *argv[])
             usleep(200);
             for(i = 0; i < generate; i++){
                 send(gen_socket[i], num, 10, 0);
-                usleep(100);
                 send(gen_socket[i], l, 100, 0);
-                usleep(100);
             }
 
             char* key_part[generate];
@@ -123,13 +119,16 @@ int main(int argc, char const *argv[])
                 sprintf(num, "%d", i);
                 printf("%s\n", num);
                 send(gen_socket[i], num, strlen(num), 0);
-                usleep(50);
+                
+                sprintf(num, "%d", strlen(key_part[i]));
+                send(gen_socket[i], num, strlen(num), 0);
 
                 send(gen_socket[i], key_part[i], strlen(key_part[i]), 0);
-                usleep(50);
+
+                sprintf(num, "%d", strlen(key_part[(i+1)%generate]));
+                send(gen_socket[i], num, strlen(num), 0);
 
                 send(gen_socket[i], key_part[(i+1)%generate], strlen(key_part[(i+1)%generate]), 0);
-                usleep(50);
             }
             generate = 0;
         } else if (decode >= 2) {

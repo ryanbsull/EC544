@@ -43,60 +43,23 @@ int main(int argc, char const *argv[])
     char choice;
     char* key_part[MAX_CLIENT];
 
-    while(1){
-        printf("GENERATE (G) OR RECONSTRUCT (R) CODE: ");
-        scanf("%c", &choice);
-        if(choice == 'G'){
-            send(sock , gen , strlen(gen) , 0 );
-            printf("GENERATE COMMAND SENT\nAWAITING CODES\n");
-            read( sock , buffer, 1);
-            printf("%s\n",buffer );
-            memset(buffer, 0, 2048);
-
-            read(sock, buffer, 10);
-            printf("NUMCLIENT: %s\n",buffer );
-            int numclient = atoi(buffer);
-            memset(buffer, 0, 2048);
-
-            read(sock, buffer, 10);
-            printf("LEN: %s\n",buffer);
-            int len = atoi(buffer);
-            memset(buffer, 0, 2048);
-            int i;
-            for(i = 0; i < numclient; i++)
-                key_part[i] = (char*)malloc(len*sizeof(char));
-
-            read(sock , buffer, 1);
-            int p1 = atoi(buffer);
-            int p2 = (p1 + 1) % numclient;
-            memset(buffer, 0, 2048);
-            printf("P1: %s\n", buffer);
-            printf("P2: %d\n", p2);
-
-            read(sock , buffer, len);
-            strcpy(key_part[p1], buffer);
-            memset(buffer, 0, 2048);
-
-            read(sock , buffer, len);
-            strcpy(key_part[p2], buffer);
-            memset(buffer, 0, 2048);
-            
-            printf("KEYPART 1: \n");
-            printf("%s", key_part[p1]);
-            printf("\n\n");
-            printf("KEYPART 2: \n");
-            printf("%s", key_part[p2]);
-            printf("\n\n");
-
-            int part1 = open("key_1", O_WRONLY | O_APPEND | O_CREAT, 0644);
-            write(part1, key_part[p1], len);
-            int part2 = open("key_2", O_WRONLY | O_APPEND | O_CREAT, 0644);
-            write(part2, key_part[p2], len);
-            
-            close(part1);
-            close(part2);
-            close(sock);
+    printf("GENERATE (G) OR RECONSTRUCT (R) CODE: ");
+    scanf("%c", &choice);
+    if(choice == 'G'){
+        send(sock , gen , strlen(gen) , 0 );
+        printf("GENERATE COMMAND SENT\nAWAITING CODES\n");
+        char* brk = "\n";
+        int data = open("key.dat", O_WRONLY | O_APPEND | O_CREAT, 0644);
+        int cnt;
+        while((cnt = read( sock , buffer, sizeof(buffer))) > 0) {
+            write(data, buffer, cnt);
+            write(data, brk, strlen(brk));
         }
+        write(data, brk, strlen(brk));
+        write(data, brk, strlen(brk));
+        close(data);
+    } else if(choice == 'R') {
+
     }
     return 0;
 }
