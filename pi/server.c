@@ -117,13 +117,13 @@ int main(int argc, char const *argv[])
             for(i = 0; i < generate; i++){
                 sprintf(num, "%d", i);
                 printf("%s\n", num);
-                send(gen_socket[i], num, priv_len, 0);
+                send(gen_socket[i], num, 10, 0);
                 usleep(100);
 
-                send(gen_socket[i], key_part[i], priv_len, 0);
+                send(gen_socket[i], key_part[i], strlen(key_part[i]), 0);
                 usleep(100);
 
-                send(gen_socket[i], key_part[(i+1)%generate], priv_len, 0);
+                send(gen_socket[i], key_part[(i+1)%generate], strlen(key_part[(i+1)%generate]), 0);
                 usleep(100);
             }
             generate = 0;

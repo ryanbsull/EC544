@@ -8,16 +8,15 @@
 #include <fcntl.h>
 
 #define PORT 1016
-#define GENERATE 1
+#define MAX_CLIENT 5
 
 int main(int argc, char const *argv[])
 {
     int sock = 0; long valread;
     struct sockaddr_in serv_addr;
-    char *hello;
-    if(GENERATE)
-        hello = "G";
-    char buffer[1024] = {0};
+    char *gen = "G";
+    char *rec = "R";
+    char buffer[2048] = {0};
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         printf("\n Socket creation error \n");
@@ -35,36 +34,36 @@ int main(int argc, char const *argv[])
         printf("\nInvalid address/ Address not supported \n");
         return -1;
     }
-    
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
     {
         printf("\nConnection Failed \n");
         return -1;
     }
+    
     char choice;
+    char* key_part[MAX_CLIENT];
+
     while(1){
-        printf("GENERATE OR RECONSTRUCT CODE: ");
+        printf("GENERATE (G) OR RECONSTRUCT (R) CODE: ");
         scanf("%c", &choice);
         if(choice == 'G'){
-            send(sock , hello , strlen(hello) , 0 );
+            send(sock , gen , strlen(gen) , 0 );
             printf("GENERATE COMMAND SENT\nAWAITING CODES\n");
-            read( sock , buffer, 1024);
+            read( sock , buffer, 1);
             printf("%s\n",buffer );
-            buffer[0] = '\0';
 
-            read(sock, buffer, 1024);
+            read(sock, buffer, 10);
             printf("NUMCLIENT: %s\n",buffer );
             int numclient = atoi(buffer);
-            char* key_part[numclient];
 
-            while(read(sock, buffer, 100) < 1);
+            read(sock, buffer, 10);
             printf("LEN: %s\n",buffer);
             int len = atoi(buffer);
             int i;
             for(i = 0; i < numclient; i++)
                 key_part[i] = (char*)malloc(len*sizeof(char));
 
-            while(read(sock , buffer, 100) < 1);
+            read(sock , buffer, 10);
             int p1 = atoi(buffer);
             int p2 = (p1 + 1) % numclient;
             printf("P1: %s\n", buffer);
@@ -90,6 +89,7 @@ int main(int argc, char const *argv[])
             
             close(part1);
             close(part2);
+            close(sock);
         }
     }
     return 0;
