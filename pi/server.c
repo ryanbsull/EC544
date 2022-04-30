@@ -99,8 +99,8 @@ int main(int argc, char const *argv[])
             printf("PRIV_LEN: %s\n\n", l);
             usleep(200);
             for(i = 0; i < generate; i++){
-                send(gen_socket[i], num, 10, 0);
-                send(gen_socket[i], l, 100, 0);
+                send(gen_socket[i], num, strlen(num), 0);
+                send(gen_socket[i], l, strlen(l), 0);
             }
 
             char* key_part[generate];
@@ -110,17 +110,14 @@ int main(int argc, char const *argv[])
 
             split_key(priv_key, key_part, generate, priv_len);
             printf("KEY SPLIT\n\n");
-
-            for(i = 0; i < generate; i++)
-                printf("%s\n\n", key_part[i]);
             
             for(i = 0; i < generate; i++){
-                sprintf(num, "%d", i);
+                sprintf(num, "%d\n", i);
                 send(gen_socket[i], num, strlen(num), 0);
                 
-                sprintf(num, "%d", strlen(key_part[i]));
+                sprintf(num, "%d\n", strlen(key_part[i]));
                 send(gen_socket[i], num, strlen(num), 0);
-                sprintf(num, "%d", strlen(key_part[(i+1)%generate]));
+                sprintf(num, "%d\n", strlen(key_part[(i+1)%generate]));
                 send(gen_socket[i], num, strlen(num), 0);
             }
             for(i = 0; i < generate; i++){
