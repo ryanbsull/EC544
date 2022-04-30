@@ -29,7 +29,6 @@ int main(int argc, char const *argv[])
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(PORT);
     
-    // Convert IPv4 and IPv6 addresses from text to binary form
     if(inet_pton(AF_INET, "192.168.99.157", &serv_addr.sin_addr)<=0)
     {
         printf("\nInvalid address/ Address not supported \n");
@@ -88,68 +87,6 @@ int main(int argc, char const *argv[])
                 }
             }
         }
-        /*
-        while(line >= 0 && cnt < 6){
-            if(line_buf[0] == '\n'){
-                line = getline(&line_buf, &line_buf_sz, data);
-                f_idx += line;
-                continue;
-            }
-            switch(cnt){
-                case 0:
-                    break;
-                case 1:
-                    numclient = atoi(line_buf);
-                    break;
-                case 2:
-                    key_len = atoi(line_buf);
-                    break;
-                case 3:
-                    idx = atoi(line_buf);
-                    break;
-                case 4:
-                    key0_len = atoi(line_buf);
-                    break;
-                case 5:
-                    key1_len = atoi(line_buf);
-                    break;
-            }
-            line = getline(&line_buf, &line_buf_sz, data);
-            f_idx+=line;
-            cnt++;
-        }
-
-        key0 = malloc(sizeof(char)*(key0_len + 1));
-        strcpy(key0, line_buf);
-        key1 = malloc(sizeof(char)*(key1_len + 1));
-        fread(key0+line, key0_len-line, 1, data);
-        fread(key1, key1_len, 1, data);
-        free(line_buf);
-        fclose(data);
-
-        printf("NUMCLIENT: %d\nIDX: %d\nKEY0_LEN: %d\nKEY1_LEN: %d\nKEY1:\n%s\nKEY2:\n%s\n",
-                numclient, idx, key0_len, key1_len, key0, key1);
-        send(sock , rec , strlen(rec) , 0 );
-        read(sock, buffer, sizeof(buffer));
-        printf("%s\n", buffer);
-        char num[100];
-        if(buffer[0] == 'R'){
-            read(sock, buffer, sizeof(buffer));
-            printf("%s\n", buffer);
-            if(buffer[0] == 'X'){
-                sprintf(num, "%d\n", idx);
-                usleep(1000);
-                send(sock, num, sizeof(num), 0);
-                sprintf(num, "%d\n", key0_len);
-                usleep(1000);
-                send(sock, num, sizeof(num), 0);
-                sprintf(num, "%d\n", key1_len);
-                usleep(1000);
-                send(sock, num, sizeof(num), 0);
-                send(sock, key0, sizeof(key0), 0);
-                send(sock, key1, sizeof(key1), 0);
-            }
-        }*/
     }
     return 0;
 }

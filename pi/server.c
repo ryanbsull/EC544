@@ -194,16 +194,15 @@ int main(int argc, char const *argv[])
                 
                 key_part[(idx+1)%nc] = malloc(sizeof(char)*(key1_len + 1));
                 fread(key_part[(idx+1)%nc], key1_len, 1, fp);
-
-                printf("NUMCLIENT: %d\nIDX: %d\nKEY0_LEN: %d\nKEY1_LEN: %d\nKEY1:\n%s\nKEY2:\n%s\n",
-                    nc, idx, key0_len, key1_len, key_part[idx], key_part[(idx+1)%nc]);
                 fclose(fp);
             }
             free(line_buf);
-            int key = open("key_reconstruct.pem", O_WRONLY | O_APPEND | O_CREAT, 0644);
+            int key = open("key_reconstruct.pem", O_APPEND | O_CREAT, 0644);
 
-            for(i = 0; i < nc; i++)
+            for(i = 0; i < nc; i++){
                 write(key, key_part[i], strlen(key_part[i]));
+                printf("PART%d:\n%s\n", i, key_part[i]);
+            }
             
             printf("KEY RECONSTRUCTED\n");
         }
