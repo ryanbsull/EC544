@@ -94,8 +94,8 @@ int main(int argc, char const *argv[])
 
             char num[10];
             char l[10];
-            sprintf(num, "%d", generate);
-            sprintf(l, "%d", priv_len);
+            sprintf(num, "%d\n", generate);
+            sprintf(l, "%d\n", priv_len);
             printf("PRIV_LEN: %s\n\n", l);
             usleep(200);
             for(i = 0; i < generate; i++){
