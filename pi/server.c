@@ -155,6 +155,8 @@ int main(int argc, char const *argv[])
             for(i = 0; i < decode; i++){
                 sprintf(file, "key%i.dat", i);
                 fp = fopen(file, "r");
+                line = getline(&line_buf, &line_buf_sz, fp);
+                f_idx += line;
 
                 while(line >= 0 && cnt < 6){
                     if(line_buf[0] == '\n'){
@@ -181,7 +183,7 @@ int main(int argc, char const *argv[])
                             key1_len = atoi(line_buf);
                             break;
                     }
-                    line = getline(&line_buf, &line_buf_sz, data);
+                    line = getline(&line_buf, &line_buf_sz, fp);
                     f_idx+=line;
                     cnt++;
                 }
@@ -189,11 +191,11 @@ int main(int argc, char const *argv[])
                 if(!key_part[idx]){
                     key_part[idx] = malloc(sizeof(char)*(key0_len + 1));
                     strcpy(key_part[idx], line_buf);
-                    fread(key_part[idx]+line, key0_len-line, 1, data);
+                    fread(key_part[idx]+line, key0_len-line, 1, fp);
                 }
                 if(!key_part[(idx+1)%nc]){
                     key_part[(idx+1)%nc] = malloc(sizeof(char)*(key1_len + 1));
-                    fread(key_part[(idx+1)%nc], key1_len, 1, data);
+                    fread(key_part[(idx+1)%nc], key1_len, 1, fp);
                 }
                 fclose(fp);
             }
