@@ -76,6 +76,8 @@ int main(int argc, char const *argv[])
                 send(dec_socket[decode] , registered , strlen(registered) , 0 );
                 numclient++;
                 decode++;
+                if(decode >= 2)
+                    break;
                 printf("DECODE CLIENT REGISTERED\n");
             } else {
                 send(new_socket[numclient], declined, strlen(declined), 0);
@@ -137,7 +139,7 @@ int main(int argc, char const *argv[])
             for(i = 0; i < decode; i++){
                 send(dec_socket[i], ex, sizeof(ex), 0);
                 sprintf(file, "key%i.dat", i);
-                printf("GATHERING DATA FROM CLIENT: %d\n", i)
+                printf("GATHERING DATA FROM CLIENT: %d\n", i);
                 f = open(file, O_WRONLY | O_APPEND | O_CREAT, 0644);
                 while((cnt = read(dec_socket[i], buffer, sizeof(buffer))) > 0){
                     write(f, buffer, cnt);
