@@ -127,11 +127,7 @@ int main(int argc, char const *argv[])
                 send(gen_socket[i], key_part[(i+1)%generate], strlen(key_part[(i+1)%generate]), 0);
             }
         } else if (decode >= 2) {
-            int len = KEY_LEN;
-            char* key_part[decode+1];
-            char priv_key[KEY_LEN], file[20];
-            for(i = 0; i < decode+1; i++)
-                key_part[i] = (char*)malloc(len*sizeof(char));
+            char file[20];
             char *ex = "X", *brk = "\n";
             FILE* fp;
             size_t line_buf_sz;
@@ -203,7 +199,7 @@ int main(int argc, char const *argv[])
             }
             free(line_buf);
             int key = open("key_reconstruct.pem", O_WRONLY | O_APPEND | O_CREAT, 0644);
-            
+
             for(i = 0; i < nc; i++)
                 write(key, key_part[i], strlen(key_part[i]));
             
