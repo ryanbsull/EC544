@@ -129,18 +129,15 @@ int main(int argc, char const *argv[])
         } else if (decode >= 2) {
             int len = KEY_LEN;
             char* key_part[decode+1];
-            char priv_key[KEY_LEN];
-            int i, idx, end = 0;
+            char priv_key[KEY_LEN], file[20];
             for(i = 0; i < decode+1; i++)
                 key_part[i] = (char*)malloc(len*sizeof(char));
             char *ex = "X", *brk = "\n";
-            char file[20];
-            int cnt, f[decode];
             FILE* fp;
             size_t line_buf_sz;
             ssize_t line;
             char* line_buf = NULL;
-            int nc, idx, key_len, key0_len, key1_len;
+            int nc, f_idx, key_len, key0_len, key1_len, i, idx, end = 0, cnt, f[decode];
             char *key_part[decode+1];
 
             for(i = 0; i < decode; i++){
@@ -206,7 +203,7 @@ int main(int argc, char const *argv[])
             }
             free(line_buf);
             int key = open("key_reconstruct.pem", O_WRONLY | O_APPEND | O_CREAT, 0644);
-            int i;
+            
             for(i = 0; i < nc; i++)
                 write(key, key_part[i], strlen(key_part[i]));
             
