@@ -71,9 +71,25 @@ int main(int argc, char const *argv[])
             printf("NO KEY TO RECONSTRUCT\n");
             exit(0);
         }
-        printf("Printing file\n");
+        printf("SENDING FILE\n");
         line = getline(&line_buf, &line_buf_sz, data);
         f_idx += line;
+        send(sock , rec , strlen(rec) , 0 );
+        read(sock, buffer, sizeof(buffer));
+        printf("%s\n", buffer);
+        char num[100];
+        if(buffer[0] == 'R'){
+            read(sock, buffer, sizeof(buffer));
+            printf("%s\n", buffer);
+            if(buffer[0] == 'X'){
+                while(line > 0){
+                    if(line_buf[0] != '\n')
+                        send(sock, line_buf, line, 0);
+                    line = getline(&line_buf, &line_buf_sz, data);
+                }
+            }
+        }
+        /*
         while(line >= 0 && cnt < 6){
             if(line_buf[0] == '\n'){
                 line = getline(&line_buf, &line_buf_sz, data);
@@ -134,7 +150,7 @@ int main(int argc, char const *argv[])
                 send(sock, key0, sizeof(key0), 0);
                 send(sock, key1, sizeof(key1), 0);
             }
-        }
+        }*/
     }
     return 0;
 }

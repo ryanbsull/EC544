@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
     int opt = 1;
     int numclient = 0;
     int addrlen = sizeof(address);
-    char buffer[1024] = {0};
+    char buffer[2048] = {0};
     char *registered = "R";
     char *declined = "D";
     int generate = 0;
@@ -149,7 +149,6 @@ int main(int argc, char const *argv[])
                 while((cnt = read(dec_socket[i], buffer, sizeof(buffer))) > 0){
                     printf("%s\n", buffer);
                     write(f[i], buffer, cnt);
-                    write(f[i], brk, strlen(brk));
                 }
                 close(f[i]);
             }
