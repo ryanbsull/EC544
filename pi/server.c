@@ -55,8 +55,7 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
     while(1){
-        numclient = 0;
-        decode = 0;
+        numclient = 0; decode = 0; generate = 0;
         printf("READY\n\n");
         while((numclient < 2 && decode < 2) || (numclient < 3 && generate < 3)) {
             if ((new_socket[numclient] = accept(server_fd, (struct sockaddr *)&address, 
@@ -125,7 +124,6 @@ int main(int argc, char const *argv[])
                 send(gen_socket[i], key_part[i], strlen(key_part[i]), 0);
                 send(gen_socket[i], key_part[(i+1)%generate], strlen(key_part[(i+1)%generate]), 0);
             }
-            generate = 0;
         } else if (decode >= 2) {
             int len = KEY_LEN;
             char* key_part[decode+1];
@@ -139,6 +137,7 @@ int main(int argc, char const *argv[])
             for(i = 0; i < decode; i++){
                 send(dec_socket[i], ex, sizeof(ex), 0);
                 sprintf(file, "key%i.dat", i);
+                printf("GATHERING DATA FROM CLIENT: %d\n", i)
                 f = open(file, O_WRONLY | O_APPEND | O_CREAT, 0644);
                 while((cnt = read(dec_socket[i], buffer, sizeof(buffer))) > 0){
                     write(f, buffer, cnt);

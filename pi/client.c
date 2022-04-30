@@ -116,8 +116,10 @@ int main(int argc, char const *argv[])
                 numclient, idx, key0_len, key1_len, key0, key1);
         send(sock , rec , strlen(rec) , 0 );
         read(sock, buffer, sizeof(buffer));
+        printf("%s\n", buffer);
         if(buffer[0] == 'R'){
             read(sock, buffer, sizeof(buffer));
+            printf("%s\n", buffer);
             if(buffer[0] == 'X'){
 
             }
