@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string.h>
+#include <fcntl.h>
 #include "../encryption/encrypt.h"
 #define PORT 1016
 #define KEY_LEN 2048
@@ -132,35 +133,19 @@ int main(int argc, char const *argv[])
             int i, idx, end = 0;
             for(i = 0; i < decode+1; i++)
                 key_part[i] = (char*)malloc(len*sizeof(char));
-            
+            char *ex = "X", *brk = "\n";
+            char file[20];
+            int cnt, f;
             for(i = 0; i < decode; i++){
-                read(dec_socket[i], buffer, len);
-                idx = atoi(buffer);
-                printf("IDX 1: %d\n", idx);
-                if(idx > end)
-                    end = idx;
-
-                read(dec_socket[i], buffer, len);
-                if(!key_part[idx])
-                    strcpy(key_part[idx], buffer);
-                
-                read(dec_socket[i], buffer, len);
-                idx = atoi(buffer);
-                printf("IDX 2: %d\n", idx);
-                if(idx > end)
-                    end = idx;
-
-                read(dec_socket[i], buffer, len);
-                if(!key_part[idx])
-                    strcpy(key_part[idx], buffer);
+                send(dec_socket[i], ex, sizeof(ex), 0);
+                sprintf(file, "key%i.dat", i);
+                f = open(file, O_WRONLY | O_APPEND | O_CREAT, 0644);
+                while((cnt = read(dec_socket[i], buffer, sizeof(buffer))) > 0){
+                    write(f, buffer, cnt);
+                    write(f, brk, strlen(brk));
+                }
+                close(f);
             }
-
-            for(i = 0; i <= end; i++)
-                strcat(priv_key, key_part[i]);
-            
-            for(i = 0; i < len; i++)
-                printf("%x", priv_key[i]);
-            printf("\n");
         }
         int i;
         for(i = 0; i < numclient; i++)
