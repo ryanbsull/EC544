@@ -117,11 +117,22 @@ int main(int argc, char const *argv[])
         send(sock , rec , strlen(rec) , 0 );
         read(sock, buffer, sizeof(buffer));
         printf("%s\n", buffer);
+        char num[100];
         if(buffer[0] == 'R'){
             read(sock, buffer, sizeof(buffer));
             printf("%s\n", buffer);
             if(buffer[0] == 'X'){
-
+                sprintf(num, "%d\n", idx);
+                usleep(1000);
+                send(sock, num, sizeof(num), 0);
+                sprintf(num, "%d\n", key0_len);
+                usleep(1000);
+                send(sock, num, sizeof(num), 0);
+                sprintf(num, "%d\n", key1_len);
+                usleep(1000);
+                send(sock, num, sizeof(num), 0);
+                send(sock, key0, sizeof(key0), 0);
+                send(sock, key1, sizeof(key1), 0);
             }
         }
     }

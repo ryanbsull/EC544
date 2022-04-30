@@ -144,8 +144,10 @@ int main(int argc, char const *argv[])
 
             for(i = 0; i < decode; i++){
                 send(dec_socket[i], ex, sizeof(ex), 0);
+                usleep(1000);
                 printf("GATHERING DATA FROM CLIENT: %d\n", i);
                 while((cnt = read(dec_socket[i], buffer, sizeof(buffer))) > 0){
+                    printf("%s\n", buffer);
                     write(f[i], buffer, cnt);
                     write(f[i], brk, strlen(brk));
                 }
