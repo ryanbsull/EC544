@@ -64,8 +64,7 @@ int main(int argc, char const *argv[])
         size_t line_buf_sz;
         ssize_t line;
         char* line_buf = NULL;
-        int line_num = 0;
-        int numclient, key0_len, key1_len, key_len, idx, f_idx = 0, cnt = 0;
+        int f_idx = 0, cnt = 0;
         char *key0, *key1, *tmp;
         if(!data){
             printf("NO KEY TO RECONSTRUCT\n");

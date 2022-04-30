@@ -136,6 +136,12 @@ int main(int argc, char const *argv[])
             char *ex = "X", *brk = "\n";
             char file[20];
             int cnt, f[decode];
+            FILE* fp;
+            size_t line_buf_sz;
+            ssize_t line;
+            char* line_buf = NULL;
+            int nc, idx, key_len, key0_len, key1_len;
+            char *key_part[decode+1];
 
             for(i = 0; i < decode; i++){
                 sprintf(file, "key%i.dat", i);
@@ -147,12 +153,64 @@ int main(int argc, char const *argv[])
                 usleep(1000);
                 printf("GATHERING DATA FROM CLIENT: %d\n", i);
                 while((cnt = read(dec_socket[i], buffer, sizeof(buffer))) > 0){
-                    printf("%s\n", buffer);
                     write(f[i], buffer, cnt);
                 }
                 close(f[i]);
             }
             printf("DATA RECIEVED\nRECONSTRUCTING KEY\n");
+
+            for(i = 0; i < decode; i++){
+                sprintf(file, "key%i.dat", i);
+                fp = fopen(file, "r");
+
+                while(line >= 0 && cnt < 6){
+                    if(line_buf[0] == '\n'){
+                        line = getline(&line_buf, &line_buf_sz, fp);
+                        f_idx += line;
+                        continue;
+                    }
+                    switch(cnt){
+                        case 0:
+                            break;
+                        case 1:
+                            nc = atoi(line_buf);
+                            break;
+                        case 2:
+                            key_len = atoi(line_buf);
+                            break;
+                        case 3:
+                            idx = atoi(line_buf);
+                            break;
+                        case 4:
+                            key0_len = atoi(line_buf);
+                            break;
+                        case 5:
+                            key1_len = atoi(line_buf);
+                            break;
+                    }
+                    line = getline(&line_buf, &line_buf_sz, data);
+                    f_idx+=line;
+                    cnt++;
+                }
+                
+                if(!key_part[idx]){
+                    key_part[idx] = malloc(sizeof(char)*(key0_len + 1));
+                    strcpy(key_part[idx], line_buf);
+                    fread(key_part[idx]+line, key0_len-line, 1, data);
+                }
+                if(!key_part[(idx+1)%nc]){
+                    key_part[(idx+1)%nc] = malloc(sizeof(char)*(key1_len + 1));
+                    fread(key_part[(idx+1)%nc], key1_len, 1, data);
+                }
+                fclose(fp);
+            }
+            free(line_buf);
+            int key = open("key_reconstruct.pem", O_WRONLY | O_APPEND | O_CREAT, 0644);
+            int i;
+            for(i = 0; i < nc; i++)
+                write(key, key_part[i], strlen(key_part[i]));
+            
+            printf("KEY RECONSTRUCTED\n");
         }
         int i;
         for(i = 0; i < numclient; i++)
