@@ -135,17 +135,21 @@ int main(int argc, char const *argv[])
                 key_part[i] = (char*)malloc(len*sizeof(char));
             char *ex = "X", *brk = "\n";
             char file[20];
-            int cnt, f;
+            int cnt, f[decode];
+
+            for(i = 0; i < decode; i++){
+                sprintf(file, "key%i.dat", i);
+                f[i] = open(file, O_WRONLY | O_APPEND | O_CREAT, 0644);
+            }
+
             for(i = 0; i < decode; i++){
                 send(dec_socket[i], ex, sizeof(ex), 0);
-                sprintf(file, "key%i.dat", i);
                 printf("GATHERING DATA FROM CLIENT: %d\n", i);
-                f = open(file, O_WRONLY | O_APPEND | O_CREAT, 0644);
                 while((cnt = read(dec_socket[i], buffer, sizeof(buffer))) > 0){
-                    write(f, buffer, cnt);
-                    write(f, brk, strlen(brk));
+                    write(f[i], buffer, cnt);
+                    write(f[i], brk, strlen(brk));
                 }
-                close(f);
+                close(f[i]);
             }
             printf("DATA RECIEVED\nRECONSTRUCTING KEY\n");
         }
