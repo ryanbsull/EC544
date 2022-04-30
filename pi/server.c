@@ -191,10 +191,10 @@ int main(int argc, char const *argv[])
                 printf("NUMCLIENT: %d\nIDX: %d\nKEY0: %d\nKEY1: %d\n", nc, idx, key0_len, key1_len);
                 key_part[idx] = malloc(sizeof(char)*(key0_len + 1));
                 strcpy(key_part[idx], line_buf);
-                fread(key_part[idx]+line, key0_len-line, 1, fp);
+                fread(key_part[idx]+line, key0_len-line, 1, fp[i]);
                 
                 key_part[(idx+1)%nc] = malloc(sizeof(char)*(key1_len + 1));
-                fread(key_part[(idx+1)%nc], key1_len, 1, fp);
+                fread(key_part[(idx+1)%nc], key1_len, 1, fp[i]);
                 fclose(fp[i]);
                 free(line_buf);
             }
