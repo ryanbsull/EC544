@@ -9,7 +9,7 @@
 
 #define PORT 1016
 #define MAX_CLIENT 5
-#define FNAME "key0.dat"
+#define FNAME "key1.dat"
 
 int main(int argc, char const *argv[])
 {
@@ -119,7 +119,7 @@ int main(int argc, char const *argv[])
         if(buffer[0] == 'R'){
             read(sock, buffer, sizeof(buffer));
             if(buffer[0] == 'X'){
-                
+
             }
         }
     }

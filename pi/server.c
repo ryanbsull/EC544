@@ -74,7 +74,7 @@ int main(int argc, char const *argv[])
                 printf("GENERATE CLIENT REGISTERED\n");
             } else if (buffer[0] == 'D') {
                 dec_socket[decode] = new_socket[numclient];
-                send(gen_socket[decode] , registered , strlen(registered) , 0 );
+                send(dec_socket[decode] , registered , strlen(registered) , 0 );
                 numclient++;
                 decode++;
                 printf("DECODE CLIENT REGISTERED\n");
@@ -146,6 +146,7 @@ int main(int argc, char const *argv[])
                 }
                 close(f);
             }
+            printf("DATA RECIEVED\nRECONSTRUCTING KEY\n");
         }
         int i;
         for(i = 0; i < numclient; i++)
