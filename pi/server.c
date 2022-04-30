@@ -129,10 +129,9 @@ int main(int argc, char const *argv[])
         } else if (decode >= 2) {
             char file[20];
             char *ex = "X", *brk = "\n";
-            //FILE* fp;
+            FILE* fp[decode];
             size_t line_buf_sz;
             ssize_t line;
-            char* line_buf = NULL;
             int nc, f_idx, key_len, key0_len, key1_len, i, idx, end = 0, cnt, f[decode];
             char *key_part[decode+1];
 
@@ -154,7 +153,9 @@ int main(int argc, char const *argv[])
 
             for(i = 0; i < decode; i++){
                 sprintf(file, "key%i.dat", i);
-                FILE *fp = fopen(file, "r");
+                printf("OPENING FILE: %s\n", file);
+                fp[i] = fopen(file, "r");
+                char* line_buf = NULL;
                 line = getline(&line_buf, &line_buf_sz, fp);
                 f_idx += line;
 
@@ -194,9 +195,9 @@ int main(int argc, char const *argv[])
                 
                 key_part[(idx+1)%nc] = malloc(sizeof(char)*(key1_len + 1));
                 fread(key_part[(idx+1)%nc], key1_len, 1, fp);
-                fclose(fp);
+                fclose(fp[i]);
+                free(line_buf);
             }
-            free(line_buf);
             int key = open("key_reconstruct.pem", O_WRONLY | O_APPEND | O_CREAT, 0644);
 
             for(i = 0; i < nc; i++){
