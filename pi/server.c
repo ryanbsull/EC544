@@ -156,12 +156,12 @@ int main(int argc, char const *argv[])
                 printf("OPENING FILE: %s\n", file);
                 fp[i] = fopen(file, "r");
                 char* line_buf = NULL;
-                line = getline(&line_buf, &line_buf_sz, fp);
+                line = getline(&line_buf, &line_buf_sz, fp[i]);
                 f_idx += line;
 
                 while(line >= 0 && cnt < 6){
                     if(line_buf[0] == '\n'){
-                        line = getline(&line_buf, &line_buf_sz, fp);
+                        line = getline(&line_buf, &line_buf_sz, fp[i]);
                         f_idx += line;
                         continue;
                     }
@@ -184,7 +184,7 @@ int main(int argc, char const *argv[])
                             key1_len = atoi(line_buf);
                             break;
                     }
-                    line = getline(&line_buf, &line_buf_sz, fp);
+                    line = getline(&line_buf, &line_buf_sz, fp[i]);
                     f_idx+=line;
                     cnt++;
                 }
