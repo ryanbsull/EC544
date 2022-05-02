@@ -158,14 +158,15 @@ int main(int argc, char const *argv[])
             }
 
             for(i = 0; i < decode; i++){
+                cnt = 0;
                 printf("FP: %p\n", fp[i]);
                 line_buf[i] = NULL;
-                line_buf_sz = 0
+                line_buf_sz = 0;
                 line = getline(&(line_buf[i]), &line_buf_sz, fp[i]);
                 f_idx += line;
 
                 while(line >= 0 && cnt < 6){
-                    if(line_buf[0] == '\n'){
+                    if(line_buf[i][0] == '\n'){
                         line = getline(&(line_buf[i]), &line_buf_sz, fp[i]);
                         f_idx += line;
                         continue;
@@ -193,11 +194,12 @@ int main(int argc, char const *argv[])
                     f_idx+=line;
                     cnt++;
                 }
-                printf("%s\n", line_buf[i]);
+
                 key_part[idx] = malloc(sizeof(char)*(key0_len + 1));
                 strcpy(key_part[idx], line_buf[i]);
                 fread(key_part[idx]+line, key0_len-line, 1, fp[i]);
-                
+                printf("%s", key_part[idx]);
+
                 key_part[(idx+1)%nc] = malloc(sizeof(char)*(key1_len + 1));
                 fread(key_part[(idx+1)%nc], key1_len, 1, fp[i]);
                 fclose(fp[i]);
