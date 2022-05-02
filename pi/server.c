@@ -78,7 +78,7 @@ int main(int argc, char const *argv[])
                 decode++;
                 if(decode >= 2)
                     break;
-                printf("DECODE CLIENT REGISTERED\n");
+                printf("RECONSTRUCT CLIENT REGISTERED\n");
             } else {
                 send(new_socket[numclient], declined, strlen(declined), 0);
                 printf("CLIENT DECLINED\n");
@@ -159,7 +159,6 @@ int main(int argc, char const *argv[])
 
             for(i = 0; i < decode; i++){
                 cnt = 0;
-                printf("FP: %p\n", fp[i]);
                 line_buf[i] = NULL;
                 line_buf_sz = 0;
                 line = getline(&(line_buf[i]), &line_buf_sz, fp[i]);
@@ -198,7 +197,6 @@ int main(int argc, char const *argv[])
                 key_part[idx] = malloc(sizeof(char)*(key0_len + 1));
                 strcpy(key_part[idx], line_buf[i]);
                 fread(key_part[idx]+line, key0_len-line, 1, fp[i]);
-                printf("%s", key_part[idx]);
 
                 key_part[(idx+1)%nc] = malloc(sizeof(char)*(key1_len + 1));
                 fread(key_part[(idx+1)%nc], key1_len, 1, fp[i]);
