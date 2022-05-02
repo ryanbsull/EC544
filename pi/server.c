@@ -150,11 +150,15 @@ int main(int argc, char const *argv[])
                 close(f[i]);
             }
             printf("DATA RECIEVED\nRECONSTRUCTING KEY\n");
-
+            
             for(i = 0; i < decode; i++){
                 sprintf(file, "key%i.dat", i);
                 printf("OPENING FILE: %s\n", file);
                 fp[i] = fopen(file, "r");
+                printf("FP: %p\n", fp[i]);
+            }
+
+            for(i = 0; i < decode; i++){
                 char* line_buf = NULL;
                 line = getline(&line_buf, &line_buf_sz, fp[i]);
                 f_idx += line;
@@ -198,8 +202,8 @@ int main(int argc, char const *argv[])
                 fclose(fp[i]);
                 free(line_buf);
             }
+            
             int key = open("key_reconstruct.pem", O_WRONLY | O_APPEND | O_CREAT, 0644);
-
             for(i = 0; i < nc; i++){
                 write(key, key_part[i], strlen(key_part[i]));
                 printf("PART%d:\n%s\n", i, key_part[i]);
