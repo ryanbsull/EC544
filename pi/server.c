@@ -130,6 +130,7 @@ int main(int argc, char const *argv[])
             char file[20];
             char *ex = "X", *brk = "\n";
             FILE* fp[decode];
+            char* line_buf[decode];
             size_t line_buf_sz;
             ssize_t line;
             int nc, f_idx, key_len, key0_len, key1_len, i, idx, end = 0, cnt, f[decode];
@@ -158,13 +159,14 @@ int main(int argc, char const *argv[])
 
             for(i = 0; i < decode; i++){
                 printf("FP: %p\n", fp[i]);
-                char* line_buf = NULL;
-                line = getline(&line_buf, &line_buf_sz, fp[i]);
+                line_buf[i] = NULL;
+                line_buf_sz = 0
+                line = getline(&(line_buf[i]), &line_buf_sz, fp[i]);
                 f_idx += line;
 
                 while(line >= 0 && cnt < 6){
                     if(line_buf[0] == '\n'){
-                        line = getline(&line_buf, &line_buf_sz, fp[i]);
+                        line = getline(&(line_buf[i]), &line_buf_sz, fp[i]);
                         f_idx += line;
                         continue;
                     }
@@ -172,34 +174,34 @@ int main(int argc, char const *argv[])
                         case 0:
                             break;
                         case 1:
-                            nc = atoi(line_buf);
+                            nc = atoi(line_buf[i]);
                             break;
                         case 2:
-                            key_len = atoi(line_buf);
+                            key_len = atoi(line_buf[i]);
                             break;
                         case 3:
-                            idx = atoi(line_buf);
+                            idx = atoi(line_buf[i]);
                             break;
                         case 4:
-                            key0_len = atoi(line_buf);
+                            key0_len = atoi(line_buf[i]);
                             break;
                         case 5:
-                            key1_len = atoi(line_buf);
+                            key1_len = atoi(line_buf[i]);
                             break;
                     }
-                    line = getline(&line_buf, &line_buf_sz, fp[i]);
+                    line = getline(&(line_buf[i]), &line_buf_sz, fp[i]);
                     f_idx+=line;
                     cnt++;
                 }
-                printf("%s\n", line_buf);
+                printf("%s\n", line_buf[i]);
                 key_part[idx] = malloc(sizeof(char)*(key0_len + 1));
-                strcpy(key_part[idx], line_buf);
+                strcpy(key_part[idx], line_buf[i]);
                 fread(key_part[idx]+line, key0_len-line, 1, fp[i]);
                 
                 key_part[(idx+1)%nc] = malloc(sizeof(char)*(key1_len + 1));
                 fread(key_part[(idx+1)%nc], key1_len, 1, fp[i]);
                 fclose(fp[i]);
-                free(line_buf);
+                free(line_buf[i]);
             }
             
             int key = open("key_reconstruct.pem", O_WRONLY | O_APPEND | O_CREAT, 0644);
