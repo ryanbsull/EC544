@@ -153,12 +153,11 @@ int main(int argc, char const *argv[])
             
             for(i = 0; i < decode; i++){
                 sprintf(file, "key%i.dat", i);
-                printf("OPENING FILE: %s\n", file);
                 fp[i] = fopen(file, "r");
-                printf("FP: %p\n", fp[i]);
             }
 
             for(i = 0; i < decode; i++){
+                printf("FP: %p\n", fp[i]);
                 char* line_buf = NULL;
                 line = getline(&line_buf, &line_buf_sz, fp[i]);
                 f_idx += line;
@@ -192,7 +191,7 @@ int main(int argc, char const *argv[])
                     f_idx+=line;
                     cnt++;
                 }
-                printf("NUMCLIENT: %d\nIDX: %d\nKEY0: %d\nKEY1: %d\n", nc, idx, key0_len, key1_len);
+                printf("%s\n", line_buf);
                 key_part[idx] = malloc(sizeof(char)*(key0_len + 1));
                 strcpy(key_part[idx], line_buf);
                 fread(key_part[idx]+line, key0_len-line, 1, fp[i]);
@@ -206,7 +205,7 @@ int main(int argc, char const *argv[])
             int key = open("key_reconstruct.pem", O_WRONLY | O_APPEND | O_CREAT, 0644);
             for(i = 0; i < nc; i++){
                 write(key, key_part[i], strlen(key_part[i]));
-                printf("PART%d:\n%s\n", i, key_part[i]);
+                //printf("PART%d:\n%s\n", i, key_part[i]);
             }
             
             printf("KEY RECONSTRUCTED\n");
