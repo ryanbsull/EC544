@@ -9,7 +9,7 @@
 
 #define PORT 1016
 #define MAX_CLIENT 5
-#define FNAME "key1.dat"
+#define FNAME "key.dat"
 
 int main(int argc, char const *argv[])
 {
